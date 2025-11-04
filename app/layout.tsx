@@ -12,8 +12,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en">
       <body className="antialiased bg-white text-gray-900">
+        {/* Sticky glass navbar */}
         <Navbar />
-        <main className="min-h-screen">{children}</main>
+        {/* Top padding so pages don’t sit under the fixed navbar */}
+        <div className="pt-20">{children}</div>
         <Footer />
       </body>
     </html>
