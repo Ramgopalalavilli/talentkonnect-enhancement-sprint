@@ -1,129 +1,63 @@
-"use client";
-
-import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { useState } from "react";
-import { motion } from "framer-motion";
-import { Menu, X } from "lucide-react";
-
-const LINKS = [
-  { href: "/", label: "Home" },
-  { href: "/board", label: "Board" },
-  { href: "/about", label: "About" },
-];
+'use client';
+import Link from 'next/link';
+import { useEffect, useState, useCallback } from 'react';
 
 export default function Navbar() {
-  const pathname = usePathname();
   const [open, setOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 6);
+    onScroll();
+    window.addEventListener('scroll', onScroll);
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+
+  const toggle = useCallback(() => setOpen(v => !v), []);
+  const close = useCallback(() => setOpen(false), []);
 
   return (
-    <header className="sticky top-0 z-30 border-b border-emerald-100/70 bg-white/70 backdrop-blur-md dark:border-emerald-900/30 dark:bg-zinc-950/60">
-      <div className="mx-auto flex h-14 max-w-6xl items-center justify-between px-4 sm:px-6">
-        {/* Brand */}
-        <Link href="/" className="flex items-center gap-2 font-semibold">
-          <span className="inline-flex h-7 w-7 items-center justify-center rounded-lg bg-emerald-600 text-white">
-            TK
-          </span>
-          <span className="text-zinc-900 dark:text-white">TalentKonnect</span>
-        </Link>
-
-        {/* Desktop nav */}
-        <nav className="hidden items-center gap-1 md:flex">
-          {LINKS.map((link) => {
-            const active = pathname === link.href;
-            return (
-              <NavItem key={link.href} href={link.href} active={active}>
-                {link.label}
-              </NavItem>
-            );
-          })}
-
-          <Link
-            href="/launch"
-            className="ml-3 inline-flex items-center rounded-xl bg-emerald-600 px-3.5 py-2 text-sm font-semibold text-white shadow-md shadow-emerald-600/20 transition hover:bg-emerald-700"
-          >
-            + Add Your Profile
+    <header className={`sticky top-0 z-40 w-full border-b border-gray-100 backdrop-blur supports-[backdrop-filter]:bg-white/70 bg-white/60 transition-shadow ${scrolled ? 'shadow-sm' : ''}`}>
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 h-16">
+        <div className="flex h-full items-center justify-between">
+          <Link href="/" className="flex items-center gap-2" onClick={close}>
+            <span className="inline-flex h-8 w-8 items-center justify-center rounded-lg bg-emerald-600 text-white text-sm font-bold">TK</span>
+            <span className="text-lg font-semibold">TalentKonnect</span>
           </Link>
-        </nav>
 
-        {/* Mobile toggle */}
-        <button
-          className="inline-flex items-center justify-center rounded-lg p-2 text-zinc-700 hover:bg-zinc-100 md:hidden dark:text-zinc-200 dark:hover:bg-zinc-800/60"
-          aria-label="Toggle menu"
-          onClick={() => setOpen((v) => !v)}
-        >
-          {open ? <X size={20} /> : <Menu size={20} />}
-        </button>
+          <nav className="hidden md:flex items-center gap-3">
+            <Link href="/board" className="inline-flex items-center rounded-xl px-4 py-2 text-sm font-semibold text-gray-700 ring-1 ring-gray-200 bg-white transition hover:bg-gray-50 hover:shadow">Browse Talents</Link>
+            <Link href="/profile/start" className="inline-flex items-center gap-2 rounded-xl bg-emerald-600 px-4 py-2 text-sm font-semibold text-white shadow transition hover:bg-emerald-700 hover:-translate-y-0.5 hover:shadow-lg">🚀 Launch Profile</Link>
+          </nav>
+
+          <button
+            type="button"
+            aria-label="Open menu"
+            aria-expanded={open}
+            onClick={toggle}
+            className="md:hidden inline-flex h-10 w-10 items-center justify-center rounded-lg ring-1 ring-gray-200 text-gray-700 hover:bg-gray-50"
+          >
+            {open ? (
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M18.3 5.71 12 12l6.3 6.29-1.41 1.42L10.59 13.4 4.3 19.71 2.89 18.3 9.17 12 2.89 5.71 4.3 4.29 10.59 10.6l6.3-6.31z"/></svg>
+            ) : (
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+            )}
+          </button>
+        </div>
       </div>
 
-      {/* Mobile menu */}
-      {open && (
-        <motion.nav
-          initial={{ opacity: 0, y: -6 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -6 }}
-          className="md:hidden"
-        >
-          <div className="mx-auto max-w-6xl px-4 pb-4">
-            <div className="rounded-xl border border-emerald-100/70 bg-white/80 p-2 shadow-sm backdrop-blur dark:border-emerald-900/30 dark:bg-zinc-900/70">
-              {LINKS.map((link) => {
-                const active = pathname === link.href;
-                return (
-                  <Link
-                    key={link.href}
-                    href={link.href}
-                    onClick={() => setOpen(false)}
-                    className={`block rounded-lg px-3 py-2 text-sm ${
-                      active
-                        ? "bg-emerald-50 font-semibold text-emerald-700 dark:bg-emerald-950/30 dark:text-emerald-300"
-                        : "text-zinc-700 hover:bg-zinc-100 dark:text-zinc-200 dark:hover:bg-zinc-800/60"
-                    }`}
-                  >
-                    {link.label}
-                  </Link>
-                );
-              })}
-              <Link
-                href="/launch"
-                onClick={() => setOpen(false)}
-                className="mt-2 block rounded-lg bg-emerald-600 px-3 py-2 text-center text-sm font-semibold text-white hover:bg-emerald-700"
-              >
-                + Add Your Profile
-              </Link>
+      <div className={`md:hidden border-top border-gray-100 bg-white/90 backdrop-blur transition-[max-height,opacity] duration-300 overflow-hidden ${open ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'}`}>
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-4">
+          <nav className="flex flex-col gap-2">
+            <Link href="/board" onClick={close} className="rounded-xl px-4 py-3 text-sm font-semibold text-gray-800 ring-1 ring-gray-200 bg-white hover:bg-gray-50">Browse Talents</Link>
+            <Link href="/profile/start" onClick={close} className="rounded-xl px-4 py-3 text-sm font-semibold text-white bg-emerald-600 hover:bg-emerald-700 shadow">🚀 Launch Profile</Link>
+            <div className="mt-2 grid grid-cols-2 gap-2">
+              <Link href="/pricing" onClick={close} className="text-sm text-gray-600 hover:text-black px-2 py-2 rounded-lg hover:bg-gray-50">Pricing</Link>
+              <Link href="/contact" onClick={close} className="text-sm text-gray-600 hover:text-black px-2 py-2 rounded-lg hover:bg-gray-50">Contact</Link>
             </div>
-          </div>
-        </motion.nav>
-      )}
+          </nav>
+        </div>
+      </div>
     </header>
-  );
-}
-
-function NavItem({
-  href,
-  active,
-  children,
-}: {
-  href: string;
-  active: boolean;
-  children: React.ReactNode;
-}) {
-  return (
-    <Link
-      href={href}
-      className="relative rounded-lg px-3 py-2 text-sm font-medium text-zinc-700 transition hover:text-zinc-900 dark:text-zinc-300 dark:hover:text-white"
-    >
-      <span>{children}</span>
-
-      {/* gradient underline on hover/active */}
-      {(active) && (
-        <motion.span
-          layoutId="nav-underline"
-          className="absolute inset-x-2 -bottom-0.5 h-0.5 rounded-full bg-gradient-to-r from-emerald-600 to-emerald-400"
-        />
-      )}
-      {!active && (
-        <span className="absolute inset-x-3 -bottom-0.5 h-px rounded-full bg-emerald-400/0 transition group-hover:bg-emerald-400/60" />
-      )}
-    </Link>
   );
 }
