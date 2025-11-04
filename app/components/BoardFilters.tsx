@@ -1,45 +1,38 @@
 'use client';
 
-import { motion } from 'framer-motion';
-import React from 'react';
+import * as React from 'react';
 
 export type Filters = {
   skill: string;
   budget: '' | 'low' | 'medium' | 'high';
-  time: '' | 'Tonight' | 'Weekend' | 'Weekdays';
-  city: string;
+  time: 'Any Time' | 'Tonight' | 'Weekend' | 'Weekdays';
+  city: 'All Cities' | string;
 };
 
-export default function BoardFilters({
-  filters,
-  setFilters,
-  skills,
-  cities,
-}: {
+type Props = {
   filters: Filters;
   setFilters: React.Dispatch<React.SetStateAction<Filters>>;
-  skills: string[];
-  cities: string[];
-}) {
-  const set = (key: keyof Filters, value: Filters[keyof Filters]) =>
-    setFilters((prev) => ({ ...prev, [key]: value } as Filters));
+  skills?: string[];
+  cities?: string[];
+};
+
+export default function BoardFilters({ filters, setFilters, skills = [], cities = [] }: Props) {
+  const onChange =
+    (key: keyof Filters) =>
+    (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+      setFilters((f) => ({ ...f, [key]: e.target.value }));
+    };
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 10 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.35 }}
-      className="rounded-3xl border border-gray-200 bg-white/70 backdrop-blur p-4 shadow-sm
-                 hover:shadow-2xl hover:shadow-emerald-100/60 transition"
-    >
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 text-sm">
-        <Field label="💡 Skill">
+    <div className="w-full rounded-2xl border border-gray-200 bg-white/70 backdrop-blur p-4 md:p-6 shadow-sm">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        {/* Skill */}
+        <div>
+          <label className="block text-xs font-medium text-gray-600 mb-1">Skill</label>
           <select
             value={filters.skill}
-            onChange={(e) => set('skill', e.target.value)}
-            className="w-full rounded-xl border-gray-200 bg-white
-                       focus:ring-2 focus:ring-emerald-300 focus:border-emerald-400
-                       hover:border-emerald-400 transition"
+            onChange={onChange('skill')}
+            className="w-full rounded-xl border-gray-300 focus:ring-2 focus:ring-emerald-400 focus:border-emerald-400"
           >
             <option value="">All Skills</option>
             {skills.map((s) => (
@@ -48,64 +41,55 @@ export default function BoardFilters({
               </option>
             ))}
           </select>
-        </Field>
+        </div>
 
-        <Field label="💰 Budget">
+        {/* Budget */}
+        <div>
+          <label className="block text-xs font-medium text-gray-600 mb-1">Budget</label>
           <select
             value={filters.budget}
-            onChange={(e) => set('budget', e.target.value as Filters['budget'])}
-            className="w-full rounded-xl border-gray-200 bg-white
-                       focus:ring-2 focus:ring-emerald-300 focus:border-emerald-400
-                       hover:border-emerald-400 transition"
+            onChange={onChange('budget')}
+            className="w-full rounded-xl border-gray-300 focus:ring-2 focus:ring-emerald-400 focus:border-emerald-400"
           >
             <option value="">Any Budget</option>
             <option value="low">Under $10</option>
-            <option value="medium">$10 – $50</option>
+            <option value="medium">$10 — $50</option>
             <option value="high">Above $50</option>
           </select>
-        </Field>
+        </div>
 
-        <Field label="🕒 When">
+        {/* Time */}
+        <div>
+          <label className="block text-xs font-medium text-gray-600 mb-1">When</label>
           <select
             value={filters.time}
-            onChange={(e) => set('time', e.target.value as Filters['time'])}
-            className="w-full rounded-xl border-gray-200 bg-white
-                       focus:ring-2 focus:ring-emerald-300 focus:border-emerald-400
-                       hover:border-emerald-400 transition"
+            onChange={onChange('time')}
+            className="w-full rounded-xl border-gray-300 focus:ring-2 focus:ring-emerald-400 focus:border-emerald-400"
           >
-            <option value="">Any Time</option>
+            <option value="Any Time">Any Time</option>
             <option value="Tonight">Tonight</option>
             <option value="Weekend">Weekend</option>
             <option value="Weekdays">Weekdays</option>
           </select>
-        </Field>
+        </div>
 
-        <Field label="📍 City">
+        {/* City */}
+        <div>
+          <label className="block text-xs font-medium text-gray-600 mb-1">City</label>
           <select
             value={filters.city}
-            onChange={(e) => set('city', e.target.value)}
-            className="w-full rounded-xl border-gray-200 bg-white
-                       focus:ring-2 focus:ring-emerald-300 focus:border-emerald-400
-                       hover:border-emerald-400 transition"
+            onChange={onChange('city')}
+            className="w-full rounded-xl border-gray-300 focus:ring-2 focus:ring-emerald-400 focus:border-emerald-400"
           >
-            <option value="">All Cities</option>
+            <option value="All Cities">All Cities</option>
             {cities.map((c) => (
               <option key={c} value={c}>
                 {c}
               </option>
             ))}
           </select>
-        </Field>
+        </div>
       </div>
-    </motion.div>
-  );
-}
-
-function Field({ label, children }: { label: string; children: React.ReactNode }) {
-  return (
-    <label className="flex flex-col gap-1">
-      <span className="text-gray-500">{label}</span>
-      {children}
-    </label>
+    </div>
   );
 }

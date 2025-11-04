@@ -1,7 +1,6 @@
 'use client';
 
-import Image from 'next/image';
-import { motion } from 'framer-motion';
+import * as React from 'react';
 
 export type Talent = {
   id: string;
@@ -11,70 +10,74 @@ export type Talent = {
   price: number;
   rating: number;
   tags: string[];
-  extraCount?: number;
-  availability: string;
+  extraCount: number;
+  availability: 'Tonight' | 'Weekend' | 'Weekdays' | 'Any Time' | string;
   image: string;
 };
 
-export default function TalentCard({ talent }: { talent: Talent }) {
+type Props = { talent: Talent };
+
+export default function TalentCard({ talent }: Props) {
   return (
-    <motion.div
-      whileHover={{ scale: 1.03 }}
-      transition={{ duration: 0.3 }}
-      className="p-6 bg-white rounded-2xl shadow hover:shadow-2xl transition-all duration-300 flex flex-col items-center text-center"
-    >
-      {/* Profile Image */}
-      <div className="relative mx-auto mt-2 h-20 w-20 overflow-hidden rounded-full ring-1 ring-gray-200 shadow-sm">
-        <Image
-          src={talent.image}
-          alt={talent.name}
-          fill
-          sizes="80px"
-          className="object-cover object-center"
-        />
+    <article className="group rounded-2xl border border-gray-200 bg-white/80 backdrop-blur shadow-sm transition hover:shadow-lg hover:-translate-y-1">
+      {/* Header */}
+      <div className="flex items-center gap-4 p-4">
+        <div className="relative h-12 w-12 overflow-hidden rounded-full ring-1 ring-gray-200 bg-gray-100">
+          <img src={talent.image} alt={talent.name} className="h-full w-full object-cover" />
+        </div>
+        <div className="min-w-0">
+          <h3 className="text-sm font-semibold text-gray-900 truncate">{talent.name}</h3>
+          <p className="text-xs text-gray-500 truncate">📍 {talent.city}</p>
+        </div>
+        <span className="ml-auto text-xs rounded-full bg-gray-100 px-2 py-1 text-gray-700">
+          {talent.availability}
+        </span>
       </div>
 
-      {/* Name & Location */}
-      <h3 className="mt-4 text-lg font-semibold text-gray-900">{talent.name}</h3>
-      <p className="text-sm text-gray-500">📍 {talent.city}</p>
+      {/* Body */}
+      <div className="px-4 pb-4">
+        <p className="text-sm text-gray-700">{talent.headline}</p>
 
-      {/* Headline */}
-      <p className="mt-2 text-sm text-gray-600">{talent.headline}</p>
+        <div className="mt-3 flex flex-wrap gap-2">
+          {talent.tags.slice(0, 3).map((t) => (
+            <span
+              key={t}
+              className="rounded-full bg-emerald-50 px-2.5 py-1 text-xs text-emerald-700 ring-1 ring-emerald-200"
+            >
+              {t}
+            </span>
+          ))}
+          {talent.extraCount > 0 && (
+            <span className="rounded-full bg-gray-100 px-2.5 py-1 text-xs text-gray-600 ring-1 ring-gray-200">
+              +{talent.extraCount}
+            </span>
+          )}
+        </div>
 
-      {/* Tags */}
-      <div className="flex flex-wrap justify-center gap-2 mt-3">
-        {talent.tags.slice(0, 3).map((tag, index) => (
-          <span
-            key={index}
-            className="px-3 py-1 text-xs font-medium bg-emerald-50 text-emerald-700 rounded-full border border-emerald-100"
+        <div className="mt-4 flex items-center justify-between">
+          <div className="text-sm text-gray-900">
+            <span className="font-semibold">${talent.price}</span>{' '}
+            <span className="text-gray-500">/ session</span>
+          </div>
+          <div className="text-xs text-amber-600">⭐ {talent.rating}</div>
+        </div>
+
+        {/* Actions */}
+        <div className="mt-4 grid grid-cols-2 gap-3">
+          <button
+            type="button"
+            className="inline-flex items-center justify-center rounded-xl bg-red-600 px-3.5 py-2 text-sm font-medium text-white transition hover:brightness-110 active:scale-[0.98]"
           >
-            {tag}
-          </span>
-        ))}
-        {talent.extraCount && (
-          <span className="px-2 py-1 text-xs font-medium bg-gray-100 text-gray-600 rounded-full">
-            +{talent.extraCount}
-          </span>
-        )}
+            ▶ Play Intro
+          </button>
+          <button
+            type="button"
+            className="inline-flex items-center justify-center rounded-xl bg-emerald-500 px-3.5 py-2 text-sm font-semibold text-white ring-1 ring-emerald-400/60 transition hover:bg-emerald-600 active:scale-[0.98]"
+          >
+            Book Now
+          </button>
+        </div>
       </div>
-
-      {/* Price + Rating */}
-      <div className="flex justify-between items-center w-full mt-4 text-sm">
-        <p className="font-semibold text-gray-800">${talent.price} / session</p>
-        <p className="text-amber-500 flex items-center gap-1">
-          ⭐ {talent.rating}
-        </p>
-      </div>
-
-      {/* Buttons */}
-      <div className="flex gap-3 mt-4 w-full">
-        <button className="flex-1 bg-red-500 text-white py-2 rounded-xl hover:bg-red-600 transition">
-          ▶ Play Intro
-        </button>
-        <button className="flex-1 bg-emerald-500 text-white py-2 rounded-xl hover:bg-emerald-600 transition">
-          Book Now
-        </button>
-      </div>
-    </motion.div>
+    </article>
   );
 }
