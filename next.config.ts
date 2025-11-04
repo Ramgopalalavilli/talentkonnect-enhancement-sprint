@@ -1,14 +1,20 @@
 import type { NextConfig } from "next";
 
-const nextConfig = {
+const nextConfig: NextConfig = {
   reactStrictMode: true,
   poweredByHeader: false,
   compress: true,
 
   images: {
     remotePatterns: [
-      { protocol: "https", hostname: "randomuser.me" },
-      { protocol: "https", hostname: "images.unsplash.com" },
+      {
+        protocol: "https",
+        hostname: "randomuser.me",
+      },
+      {
+        protocol: "https",
+        hostname: "images.unsplash.com",
+      },
     ],
   },
 
@@ -25,12 +31,13 @@ const nextConfig = {
         headers: [
           {
             key: "Cache-Control",
-            value: "public, max-age=2592000, stale-while-revalidate=86400",
+            value:
+              "public, max-age=2592000, stale-while-revalidate=86400",
           },
         ],
       },
     ];
   },
-} satisfies NextConfig;
+};
 
 export default nextConfig;
