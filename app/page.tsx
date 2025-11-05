@@ -3,7 +3,7 @@ import LandingHero from "./components/LandingHero";
 import CategoryCloud from "./components/CategoryCloud";
 import Steps from "./components/Steps";
 import PricingCTA from "./components/PricingCTA";
-import Footer from "./components/Footer";
+import Footer from "./components/footer";
 
 export default function Home() {
   return (
