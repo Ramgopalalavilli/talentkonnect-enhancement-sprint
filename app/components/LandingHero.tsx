@@ -1,49 +1,53 @@
-'use client';
-import Link from 'next/link';
+"use client";
+
+import Link from "next/link";
+import { Rocket, ArrowRight, Star } from "lucide-react";
 
 export default function LandingHero() {
   return (
-    <section className="relative overflow-hidden bg-gradient-to-b from-emerald-50/70 to-white">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-16 sm:py-24">
-        <div className="mx-auto max-w-3xl text-center">
-          {/* Small rating pill */}
-          <p className="inline-flex items-center gap-2 rounded-full bg-white px-3 py-1 text-xs font-medium text-gray-700 ring-1 ring-gray-200">
-            ⭐ Rated 4.9/5 by 10,000+ professionals
-          </p>
+    <section className="relative overflow-hidden py-24 sm:py-32 text-center">
+      {/* soft bg blobs */}
+      <div className="absolute -top-24 -left-24 h-72 w-72 rounded-full bg-emerald-300/30 blur-3xl pointer-events-none" />
+      <div className="absolute -top-32 -right-20 h-80 w-80 rounded-full bg-indigo-300/30 blur-3xl pointer-events-none" />
 
-          {/* Headline */}
-          <h1 className="mt-4 text-4xl font-extrabold tracking-tight text-gray-900 sm:text-5xl">
-            Launch Your <span className="text-emerald-600">TalentBoard</span> Profile Today.
-          </h1>
+      <div className="container relative">
+        {/* rating line */}
+        <p className="inline-flex items-center gap-2 text-sm text-slate-600">
+          <Star className="w-4 h-4 text-yellow-500" />
+          Rated 4.9/5 by 10,000+ Professionals
+        </p>
 
-          {/* Subtext */}
-          <p className="mt-5 text-lg leading-7 text-gray-600">
-            Pay $7, create your profile, and get discovered instantly by global clients.
-          </p>
+        {/* headline */}
+        <h1 className="mx-auto mt-4 max-w-4xl text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight leading-tight">
+          Launch Your <span className="text-indigo-600">TalentBoard</span> Profile Today.
+        </h1>
 
-          {/* Primary CTA */}
-          <div className="mt-8 flex justify-center">
-            <Link
-              href="/profile/start"
-              className="inline-flex items-center rounded-2xl bg-emerald-600 px-6 py-3 text-base font-semibold text-white shadow
-                         transition hover:bg-emerald-700 hover:-translate-y-0.5 hover:shadow-lg"
-            >
-              Start My Profile →
-            </Link>
-          </div>
+        {/* subtext */}
+        <p className="mx-auto mt-6 max-w-2xl text-lg text-slate-600">
+          Pay <span className="font-semibold text-emerald-600">$7</span>, create your profile, and get discovered instantly by global clients.
+        </p>
 
-          {/* Trust row */}
-          <div className="mt-6 flex flex-wrap items-center justify-center gap-4 text-xs text-gray-500">
-            <span className="inline-flex items-center gap-2">
-              <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" /> Secure Payment
-            </span>
-            <span className="inline-flex items-center gap-2">
-              <span className="h-1.5 w-1.5 rounded-full bg-amber-500" /> 4.9/5 Rating
-            </span>
-            <span className="inline-flex items-center gap-2">
-              <span className="h-1.5 w-1.5 rounded-full bg-blue-500" /> 24/7 Support
-            </span>
-          </div>
+        {/* CTA */}
+        <div className="mt-8 flex justify-center">
+          <Link
+            href="/launch"
+            className="inline-flex items-center gap-2 bg-emerald-500 text-white font-semibold px-8 py-4 rounded-full
+                       shadow-[0_4px_14px_rgba(16,185,129,0.35)]
+                       transition-all duration-300
+                       hover:bg-emerald-600 hover:shadow-[0_6px_20px_rgba(16,185,129,0.5)]
+                       hover:scale-105 active:scale-95 focus:outline-none focus:ring-4 focus:ring-emerald-200"
+          >
+            <Rocket className="w-5 h-5" />
+            Start My Profile
+            <ArrowRight className="w-5 h-5" />
+          </Link>
+        </div>
+
+        {/* perks */}
+        <div className="mt-6 flex flex-wrap items-center justify-center gap-6 text-sm text-slate-600">
+          <span className="inline-flex items-center gap-2">💳 One-time payment</span>
+          <span className="inline-flex items-center gap-2">🔒 Lifetime access</span>
+          <span className="inline-flex items-center gap-2">🎁 7 free credits</span>
         </div>
       </div>
     </section>

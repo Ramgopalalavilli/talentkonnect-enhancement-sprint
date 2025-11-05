@@ -1,140 +1,94 @@
-'use client';
+"use client";
 
-import { useMemo, useState } from 'react';
-import BoardFilters, { type Filters } from '../components/BoardFilters';
-import TalentCard, { type Talent } from '../components/TalentCard';
+import Navbar from "../components/Navbar";
+import Footer from "../components/Footer";
+import { Search, DollarSign, Calendar, MapPin } from "lucide-react";
+import TalentCard, { Talent } from "../components/TalentCard";
 
-const initialFilters: Filters = {
-  skill: '',
-  budget: '',
-  time: 'Any Time',
-  city: 'All Cities',
-};
-
-
-const TALENTS: Talent[] = [
-  {
-    id: 'aisha',
-    name: 'Aisha Verma',
-    city: 'Mumbai',
-    headline:
-      'Creative UX designer turning ideas into elegant digital experiences.',
-    price: 25,
-    rating: 4.9,
-    tags: ['UX Design', 'Figma', 'Prototyping', 'User Research'],
-    extraCount: 3,
-    availability: 'Tonight',
-    image:
-      'https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&auto=format&fit=crop',
-  },
-  {
-    id: 'liam',
-    name: 'Liam Board',
-    city: 'Bengaluru',
-    headline:
-      'Full-stack developer crafting fast, scalable web apps with precision.',
-    price: 30,
-    rating: 4.8,
-    tags: ['Full-Stack Dev', 'Next.js', 'React'],
-    extraCount: 2,
-    availability: 'Weekend',
-    image:
-      'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?q=80&auto=format&fit=crop',
-  },
-  {
-    id: 'zara',
-    name: 'Zara Khan',
-    city: 'Abu Dhabi',
-    headline:
-      'Expert resume writer and career strategist for modern professionals.',
-    price: 18,
-    rating: 4.9,
-    tags: ['Resume Writer', 'Career Coach', 'LinkedIn'],
-    extraCount: 4,
-    availability: 'Any Time',
-    image:
-      'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?q=80&auto=format&fit=crop',
-  },
-  {
-    id: 'arun',
-    name: 'Arun Menon',
-    city: 'Kochi',
-    headline:
-      'Data analyst transforming raw data into crisp, actionable dashboards.',
-    price: 15,
-    rating: 4.7,
-    tags: ['SQL', 'Dashboards', 'Data Studio'],
-    extraCount: 2,
-    availability: 'Any Time',
-    image:
-      'https://images.unsplash.com/photo-1547425260-76bcadfb4f2c?q=80&w=400&auto=format&fit=crop',
-  },
+const demo: Talent[] = [
+  { id: "1", name: "Raji", title: "Event Planner", avatar: "https://i.pravatar.cc/100?img=7", price: 35, tags: ["Chennai"], },
+  { id: "2", name: "Jaggu", title: "AI Content Writer", avatar: "https://i.pravatar.cc/100?img=8", price: 40, tags: ["Mysore"], },
+  { id: "3", name: "Kanban", title: "Marketing Expert", avatar: "https://i.pravatar.cc/100?img=9", price: 50, tags: ["Madurai"], },
+  { id: "4", name: "Maya Chen", title: "Fitness Coach", avatar: "https://i.pravatar.cc/100?img=4", price: 60, tags: ["Bangalore"], },
+  { id: "5", name: "Ava Patel", title: "Prompt Engineer", avatar: "https://i.pravatar.cc/100?img=3", price: 55, tags: ["Remote"], },
+  { id: "6", name: "Rohan Singh", title: "Web Developer", avatar: "https://i.pravatar.cc/100?img=2", price: 45, tags: ["Pune"], },
 ];
 
-
 export default function BoardPage() {
-  const [filters, setFilters] = useState<Filters>(initialFilters);
-
-  const skills = useMemo(() => {
-    const s = new Set<string>();
-    TALENTS.forEach((t) => t.tags.forEach((tag) => s.add(tag)));
-    return Array.from(s).sort();
-  }, []);
-
-  const cities = useMemo(() => {
-    const c = new Set<string>();
-    TALENTS.forEach((t) => c.add(t.city));
-    return Array.from(c).sort();
-  }, []);
-
-  const filtered = useMemo(() => {
-    return TALENTS.filter((t) => {
-      // skill
-      if (filters.skill && !t.tags.includes(filters.skill)) return false;
-
-      // budget
-      if (filters.budget) {
-        if (filters.budget === 'low' && !(t.price < 10)) return false;
-        if (filters.budget === 'medium' && !(t.price >= 10 && t.price <= 50)) return false;
-        if (filters.budget === 'high' && !(t.price > 50)) return false;
-      }
-
-      // time
-      if (filters.time && filters.time !== 'Any Time') {
-        if (t.availability !== filters.time) return false;
-      }
-
-      // city
-      if (filters.city && filters.city !== 'All Cities') {
-        if (t.city !== filters.city) return false;
-      }
-
-      return true;
-    });
-  }, [filters]);
-
   return (
-    <main className="min-h-screen bg-gradient-to-b from-white to-emerald-50/40 text-gray-900">
-      {/* Filters */}
-      <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-10">
-        <BoardFilters filters={filters} setFilters={setFilters} skills={skills} cities={cities} />
-      </div>
+    <>
+      <Navbar />
 
-      {/* Count */}
-      <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
-        <p className="mt-6 text-sm text-gray-600">
-          Showing{' '}
-          <span className="font-medium text-gray-900">{filtered?.length ?? 0}</span>{' '}
-          {filtered && filtered.length === 1 ? 'professional' : 'professionals'}
-        </p>
-      </div>
+      {/* Hero Section */}
+      <section className="py-12 text-center">
+        <div className="container">
+          <h1 className="text-4xl font-extrabold tracking-tight sm:text-5xl">
+            Find a <span className="text-indigo-600">skill</span>. <br className="hidden sm:block" />
+            <span className="text-emerald-600">Book it tonight.</span>
+          </h1>
+          <p className="mt-4 text-lg text-slate-600 max-w-2xl mx-auto">
+            From <span className="font-medium text-emerald-600">vodka cocktails</span> to{" "}
+            <span className="font-medium text-indigo-600">party planning</span> to{" "}
+            <span className="font-medium text-fuchsia-600">resume makeovers</span> — discover real people ready to help <span className="text-rose-600 font-semibold">now</span>.
+          </p>
 
-      {/* Cards */}
-      <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 mt-4 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-        {filtered.map((t) => (
-          <TalentCard key={t.id} talent={t} />
-        ))}
-      </div>
-    </main>
+          {/* Filter Bar */}
+          <div className="mt-10 grid grid-cols-1 md:grid-cols-4 gap-4 text-sm">
+            <div className="relative">
+              <Search className="absolute left-3 top-3.5 h-4 w-4 text-slate-400" />
+              <input
+                placeholder="Skill"
+                className="w-full pl-9 pr-4 py-3 rounded-xl border border-black/10 bg-white shadow-sm focus:outline-none focus:ring-2 focus:ring-emerald-400"
+              />
+            </div>
+            <div className="relative">
+              <DollarSign className="absolute left-3 top-3.5 h-4 w-4 text-slate-400" />
+              <select className="w-full pl-9 pr-4 py-3 rounded-xl border border-black/10 bg-white shadow-sm">
+                <option>Any Budget</option>
+                <option>$0 - $25</option>
+                <option>$25 - $50</option>
+                <option>$50+</option>
+              </select>
+            </div>
+            <div className="relative">
+              <Calendar className="absolute left-3 top-3.5 h-4 w-4 text-slate-400" />
+              <select className="w-full pl-9 pr-4 py-3 rounded-xl border border-black/10 bg-white shadow-sm">
+                <option>Any Time</option>
+                <option>Today</option>
+                <option>Tonight</option>
+                <option>Weekend</option>
+              </select>
+            </div>
+            <div className="relative">
+              <MapPin className="absolute left-3 top-3.5 h-4 w-4 text-slate-400" />
+              <select className="w-full pl-9 pr-4 py-3 rounded-xl border border-black/10 bg-white shadow-sm">
+                <option>All Cities</option>
+                <option>Chennai</option>
+                <option>Mysore</option>
+                <option>Madurai</option>
+                <option>Pune</option>
+              </select>
+            </div>
+          </div>
+
+          <p className="mt-6 text-sm text-slate-600">
+            Showing <span className="font-medium">{demo.length}</span> professionals
+          </p>
+        </div>
+      </section>
+
+      {/* Talent Grid */}
+      <section className="pb-16">
+        <div className="container">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {demo.map((t) => (
+              <TalentCard key={t.id} talent={t} />
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <Footer />
+    </>
   );
 }

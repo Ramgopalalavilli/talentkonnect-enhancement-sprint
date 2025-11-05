@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "target": "ES2017",
+    "target": "es5",
     "lib": [
       "dom",
       "dom.iterable",
@@ -9,6 +9,7 @@
     "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
+    "forceConsistentCasingInFileNames": true,
     "noEmit": true,
     "esModuleInterop": true,
     "module": "esnext",
@@ -17,16 +18,17 @@
     "isolatedModules": true,
     "jsx": "react-jsx",
     "incremental": true,
+    // ✅ Enable Next.js plugin
     "plugins": [
       {
         "name": "next"
       }
     ],
-    // 🔽 add these two
+    // ✅ Path alias setup (use @ for root imports)
     "baseUrl": ".",
     "paths": {
       "@/*": [
-        "./*"
+        "*"
       ]
     }
   },

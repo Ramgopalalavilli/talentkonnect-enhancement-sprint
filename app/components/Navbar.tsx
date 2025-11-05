@@ -1,62 +1,81 @@
-'use client';
-import Link from 'next/link';
-import { useEffect, useState } from 'react';
-import { usePathname } from 'next/navigation';
+"use client";
+
+import Link from "next/link";
+import { Rocket, Users, Menu } from "lucide-react";
+import { useEffect, useState } from "react";
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
-  const pathname = usePathname();
+  const [open, setOpen] = useState(false);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 6);
     onScroll();
-    window.addEventListener('scroll', onScroll);
-    return () => window.removeEventListener('scroll', onScroll);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
   }, []);
-
-  const linkBase =
-    'inline-flex items-center rounded-xl px-4 py-2 text-sm font-semibold transition';
-  const ghostBtn =
-    'text-gray-700 ring-1 ring-gray-200 bg-white hover:bg-gray-50 hover:shadow';
-  const primaryBtn =
-    'text-white bg-emerald-600 hover:bg-emerald-700 shadow hover:-translate-y-0.5 hover:shadow-lg';
 
   return (
     <header
-      className={`fixed top-0 z-50 w-full border-b border-gray-100 transition-shadow
-      ${scrolled ? 'bg-white/75 backdrop-blur shadow-sm' : 'bg-white/60 backdrop-blur'} `}
+      className={`sticky top-0 z-40 w-full bg-white/80 backdrop-blur border-b transition
+      ${scrolled ? "border-black/10 shadow-[0_6px_30px_rgba(2,6,23,.06)]" : "border-transparent"}`}
     >
-      <nav className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
-        {/* Brand */}
+      <div className="container flex h-16 items-center justify-between">
+        {/* brand */}
         <Link href="/" className="flex items-center gap-2">
-          <span className="inline-flex h-8 w-8 items-center justify-center rounded-lg bg-emerald-600 text-white text-sm font-bold">
-            TK
+          <span className="inline-grid size-8 place-items-center rounded-lg bg-emerald-100 text-emerald-700">
+            <Rocket className="w-4 h-4" />
           </span>
-          <span className="text-lg font-semibold">TalentKonnect</span>
+          <span className="font-extrabold tracking-tight">TalentKonnect</span>
         </Link>
 
-        {/* Desktop */}
-        <div className="hidden gap-3 md:flex">
+        {/* removed the text links entirely */}
+
+        {/* actions */}
+        <div className="flex items-center gap-3">
           <Link
             href="/board"
-            className={`${linkBase} ${ghostBtn} ${
-              pathname?.startsWith('/board') ? 'ring-emerald-300 text-emerald-700' : ''
-            }`}
+            className="hidden sm:inline-flex rounded-full px-4 py-2 border border-black/10 bg-white text-slate-700
+                       transition-all duration-200 will-change-transform
+                       hover:bg-emerald-50 hover:text-emerald-700 hover:border-emerald-200 hover:scale-105 active:scale-95
+                       focus:outline-none focus:ring-4 focus:ring-emerald-200"
           >
+            <Users className="w-4 h-4 mr-2" />
             Browse Talents
           </Link>
-          <Link href="/profile/start" className={`${linkBase} ${primaryBtn}`}>
-            🚀 Launch Profile
-          </Link>
-        </div>
 
-        {/* Mobile menu (simple) */}
-        <div className="md:hidden">
-          <Link href="/profile/start" className="rounded-lg bg-emerald-600 px-3 py-2 text-sm font-semibold text-white">
-            Launch
+          <Link
+            href="/launch"
+            className="inline-flex items-center rounded-full px-4 py-2 font-semibold text-white bg-emerald-500
+                       shadow-[0_0_14px_rgba(16,185,129,.35)]
+                       transition-all duration-200 will-change-transform
+                       hover:bg-emerald-600 hover:shadow-[0_0_22px_rgba(16,185,129,.6)]
+                       hover:scale-105 active:scale-95
+                       focus:outline-none focus:ring-4 focus:ring-emerald-200"
+          >
+            <Rocket className="w-4 h-4 mr-2" />
+            Launch Profile
           </Link>
+
+          <button className="md:hidden p-2" aria-label="menu" onClick={() => setOpen(v => !v)}>
+            <Menu className="w-5 h-5" />
+          </button>
         </div>
-      </nav>
+      </div>
+
+      {/* mobile drawer (only action links) */}
+      {open && (
+        <div className="md:hidden border-t border-black/5 bg-white">
+          <div className="container py-3 flex flex-col gap-2 text-slate-700">
+            <Link href="/board" onClick={() => setOpen(false)} className="hover:text-emerald-600">
+              Browse Talents
+            </Link>
+            <Link href="/launch" onClick={() => setOpen(false)} className="hover:text-emerald-600 flex items-center gap-2">
+              <Rocket className="w-4 h-4" /> Launch Profile
+            </Link>
+          </div>
+        </div>
+      )}
     </header>
   );
 }
