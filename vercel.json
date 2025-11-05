@@ -1,0 +1,6 @@
+{
+  "redirects": [
+    { "source": "/talent-board", "destination": "/board", "permanent": true },
+    { "source": "/browse", "destination": "/board", "permanent": true }
+  ]
+}
